@@ -7,78 +7,100 @@
 
 from collections import deque
 
-# Define the initial state and goal state
-initial_state = {'farmer': 'left', 'fox': 'left', 'chicken': 'left', 'grain': 'left'}
-goal_state = {'farmer': 'right', 'fox': 'right', 'chicken': 'right', 'grain': 'right'}
+class State:
+    def __init__(self, farmer, fox, chicken, grain):
+        self.farmer = farmer
+        self.fox = fox
+        self.chicken = chicken
+        self.grain = grain
 
-# Print the initial and goal states for verification
-print("Initial State:", initial_state)
-print("Goal State:", goal_state)
+    def is_valid(self):
+        # Check constraints for a valid state
+        if self.chicken == self.grain and self.chicken != self.farmer:
+            return False
+        if self.fox == self.chicken and self.fox != self.farmer:
+            return False
+        return True
 
-# Define the valid moves
-valid_moves = [
-    {'farmer': 'left', 'fox': 0, 'chicken': 0, 'grain': 0},
-    {'farmer': 'left', 'fox': -1, 'chicken': 0, 'grain': 0},
-    {'farmer': 'left', 'fox': 0, 'chicken': -1, 'grain': 0},
-    {'farmer': 'left', 'fox': 0, 'chicken': 0, 'grain': -1},
-    {'farmer': 'right', 'fox': 0, 'chicken': 0, 'grain': 0},
-    {'farmer': 'right', 'fox': -1, 'chicken': 0, 'grain': 0},
-    {'farmer': 'right', 'fox': 0, 'chicken': -1, 'grain': 0},
-    {'farmer': 'right', 'fox': 0, 'chicken': 0, 'grain': -1}
-]
-# 1. Move the farmer to the left without taking any other item.
-# 2. Move the farmer and the fox to the left while leaving the chicken and grain behind.
-# 3. Move the farmer and the chicken to the left while leaving the fox and grain behind.
-# 4. Move the farmer and the grain to the left while leaving the fox and chicken behind.
-# 5. Move the farmer to the right without taking any other item.
-# 6. Move the farmer and the fox to the right while leaving the chicken and grain behind.
-# 7. Move the farmer and the chicken to the right while leaving the fox and grain behind.
-# 8. Move the farmer and the grain to the right while leaving the fox and chicken behind.
+    def is_goal(self):
+        return all(attr == '1' for attr in [self.farmer, self.fox, self.chicken, self.grain])
 
-def is_valid(state):
-    if state['chicken'] == state['grain'] and state['farmer'] != state['chicken']:
-        return False
-    if state['fox'] == state['chicken'] and state['farmer'] != state['fox']:
-        return False
-    return True
+    def __eq__(self, other):
+        return all(getattr(self, attr) == getattr(other, attr) for attr in ['farmer', 'fox', 'chicken', 'grain'])
 
-def bfs():
+    def __hash__(self):
+        return hash(tuple(getattr(self, attr) for attr in ['farmer', 'fox', 'chicken', 'grain']))
+
+    def __str__(self):
+        return f"Farmer: {self.farmer}, Fox: {self.fox}, Chicken: {self.chicken}, Grain: {self.grain}"
+
+
+def generate_next_states(current_state):
+    next_states = []
+
+    farmer, fox, chicken, grain = current_state.farmer, current_state.fox, current_state.chicken, current_state.grain
+
+    # VALID MOVES
+    # Farmer is with the chicken first.
+    if farmer == chicken:
+        next_states.append(State('1' if farmer == '0' else '0', fox, '1' if chicken == '0' else '0', grain))
+
+    # Farmer is with the fox.
+    if farmer == fox:
+        next_states.append(State('1' if farmer == '0' else '0', '1' if fox == '0' else '0', chicken, grain))
+
+    # Farmer is with the chicken and not with the fox.
+    if farmer == chicken and farmer != fox:
+        next_states.append(State('1' if farmer == '0' else '0', '1' if fox == '0' else '0',
+                                 '1' if chicken == '0' else '0', grain))
+
+    # Farmer leaves the chicken.
+    if farmer == chicken:
+        next_states.append(State('1' if farmer == '0' else '0', fox, '1' if chicken == '0' else '0', grain))
+
+    # Farmer is with the grain.
+    if farmer == grain:
+        next_states.append(State('1' if farmer == '0' else '0', fox, chicken, '1' if grain == '0' else '0'))
+
+    # Farmer gets chicken again.
+    if farmer == chicken:
+        next_states.append(State('1' if farmer == '0' else '0', fox, '1' if chicken == '0' else '0', grain))
+
+    return [state for state in next_states if state.is_valid()]
+
+def bfs(initial_state):
     queue = deque()
     visited = set()
-
     queue.append((initial_state, []))
 
     while queue:
         current_state, path = queue.popleft()
 
-        if current_state == goal_state:
-            return path
+        if current_state.is_goal():
+            return path + [current_state]
 
-        visited.add(tuple(current_state.values()))
+        visited.add(current_state)
 
-        for move in valid_moves:
-            new_state = current_state.copy()
-            for key, value in move.items():
-                if key != 'farmer':
-                    new_state[key] = 'left' if new_state[key] == 'right' else 'right'
+        next_states = generate_next_states(current_state)
 
-            new_state['farmer'] = 'left' if new_state['farmer'] == 'right' else 'right'
-
-            if (
-                    all(value in ['left', 'right'] for value in new_state.values()) and
-                    is_valid(new_state) and
-                    tuple(new_state.values()) not in visited
-            ):
-                new_path = path + [new_state]
-                queue.append((new_state, new_path))
+        for next_state in next_states:
+            if next_state not in visited:
+                queue.append((next_state, path + [current_state]))
 
     return None
 
-solution = bfs()
+def main():
+    initial_state = State('0', '0', '0', '0')
 
-if solution:
-    print("\nSolution found:")
-    for i, step in enumerate(solution):
-        print(f"Step {i + 1}: {step}")
-else:
-    print("No solution found.")
+    solution = bfs(initial_state)
+
+    if solution:
+        print("Solution found:")
+        for i, step in enumerate(solution):
+            print(f"Step {i + 1}: {step}")
+    else:
+        print("No solution found!")
+
+if __name__ == "__main__":
+    main()
+
