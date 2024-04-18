@@ -1,10 +1,12 @@
-# Araullo, John Art Marie G.
-# BSCS-NS-3A
-# CS321L-M - Artificial Intelligence
-# Machine Problem #2
-# 4x4 Killer Sudoku Solver with any Local Search or Local Beam Search Algorithm and NO BACKTRACKING.
-# Algorithm: Beam Search
-# The user can input the initial state or generate a random initial state.
+# +-------------------------------------------------------------------------------+
+# | Araullo, John Art Marie G.                                                    |
+# | BSCS-NS-3A                                                                    |
+# | CS321L-M - Artificial Intelligence                                            |
+# | Machine Problem #2                                                            |
+# | 4x4 Killer Sudoku SOlver with any Local Search or Local Beam Search Algorithm |
+# | Algorithm: Beam Search, NO BACKTRACKING / NO BACKJUMPING		              |
+# | The user can input the initial state or generate a random initial state.      |
+# +-------------------------------------------------------------------------------+
 
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel
