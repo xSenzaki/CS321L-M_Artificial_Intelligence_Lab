@@ -8,4 +8,3 @@ This repository is a compilation of my activities from the subject course of CS3
     * 4x4 Killer Sudoku using Backjumping Algorithm.
     * Six Men's Morris
     * Wumpus World
-2. Project
