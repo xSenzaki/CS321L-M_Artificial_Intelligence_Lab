@@ -1,14 +1,11 @@
-	Araullo, John Art Marie G.							                                     
- 	BSCS-NS-3A                                                                               
- 	CS321L-M - Artificial Intelligence                                                                                      
- 	Machine Problem #4                                                            	         
+# Machine Problem #4                                                            	         
  	Six Men's Morris Game: The game can be played User vs. AI or User vs. User.              
  	Algorithm: Minimax with Alpha-Beta Pruning; Cutting Off Search                           
  	Please run the program on vscode terminal or pycharm.                                    
 											                                                 
-	CONSOLE-BASED SIX MEN'S MORRIS GAME						                                 
+# CONSOLE-BASED SIX MEN'S MORRIS GAME						                                 
 											                                                 
-	GAMEPLAY									                                             
+# GAMEPLAY									                                             
 	1. Players take turns placing their pieces on the board, starting with Player 1.         
 	A piece can be placed on any empty position on the board. The goal is to form            
 	mills and prevent the opponent from doing the same.                                      
@@ -20,7 +17,7 @@
 	3.  The game ends when a player has only two pieces left or is unable to make a move.    
 	The player with more pieces on the board wins.                                           
 											                                                 
-	GAME SETUP									                                             
+# GAME SETUP									                                             
 	Step 1: 									                                             
 	Please choose Player 1:                                                                  
 	1. Human Player                                                                          
@@ -31,7 +28,7 @@
 	1. Human Player   								                                         
 	2. Computer Player                    						                             
 											                                                 
-	BOARD DISPLAY AND INPUT INSTRUCTIONS						                             
+# BOARD DISPLAY AND INPUT INSTRUCTIONS						                             
 	. --------- . --------- .    a --------- b --------- c				                     
 	|           |           |    |           |           |         			                 
 	|    . ---- . ---- .    |    |    d ---- e ---- f    |				                     
